@@ -17,6 +17,30 @@ import wandb
 from wandb.integration.sb3 import WandbCallback
 import os
 import yaml
+import datetime
+
+def print_evaluation_result(algorithm, stats):
+    print("=====================================================")
+    print(f' Average stats for {algorithm} algorithm, {len(stats)} episodes')
+    print("total_ev_served: ", sum(
+        [i[0]['total_ev_served'] for i in stats])/len(stats))
+    print("total_profits: ", sum(
+        [i[0]['total_profits'] for i in stats])/len(stats))
+    print("total_energy_charged: ", sum(
+        [i[0]['total_energy_charged'] for i in stats])/len(stats))
+    print("total_energy_discharged: ", sum(
+        [i[0]['total_energy_discharged'] for i in stats])/len(stats))
+    print("average_user_satisfaction: ", sum(
+        [i[0]['average_user_satisfaction'] for i in stats])/len(stats))
+    print("power_tracker_violation: ", sum(
+        [i[0]['power_tracker_violation'] for i in stats])/len(stats))
+    print("tracking_error: ", sum(
+        [i[0]['tracking_error'] for i in stats])/len(stats))
+    print("energy_user_satisfaction: ", sum(
+        [i[0]['energy_user_satisfaction'] for i in stats])/len(stats))
+    print("total_transformer_overload: ", sum(
+        [i[0]['total_transformer_overload'] for i in stats])/len(stats))
+    print("reward: ", sum([i[0]['episode']['r'] for i in stats])/len(stats))
 
 if __name__ == "__main__":
 
@@ -24,14 +48,12 @@ if __name__ == "__main__":
     parser.add_argument('--algorithm', type=str, default="ddpg")
     parser.add_argument('--device', type=str, default="cuda:0")
     parser.add_argument('--run_name', type=str, default="test")
-    parser.add_argument('--config_file', type=str,
-                        # default="ev2gym/example_config_files/V2GProfitMax.yaml")
-    default="ev2gym/example_config_files/PublicPST.yaml")
+    parser.add_argument('--config_file', type=str, default="PublicPST")
 
     algorithm = parser.parse_args().algorithm
     device = parser.parse_args().device
     run_name = parser.parse_args().run_name
-    config_file = parser.parse_args().config_file
+    config_file = f"ev2gym/example_config_files/{parser.parse_args().config_file}.yaml"
 
     config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)
 
@@ -78,7 +100,7 @@ if __name__ == "__main__":
                                  eval_freq=config['simulation_length']*50,
                                  n_eval_episodes=10, deterministic=True,
                                  render=False)
-
+###################################### set agent ####################################
     if algorithm == "ddpg":
         model = DDPG("MlpPolicy", env, verbose=1,
                     learning_rate = 1e-3,
@@ -115,7 +137,7 @@ if __name__ == "__main__":
     else:
         raise ValueError("Unknown algorithm")
 
-    model.learn(total_timesteps=400000,
+    model.learn(total_timesteps=4000000,
                 progress_bar=True,
                 callback=[
                     WandbCallback(
@@ -142,27 +164,7 @@ if __name__ == "__main__":
             obs = env.reset()
 
     # print average stats
-    print("=====================================================")
-    print(f' Average stats for {algorithm} algorithm, {len(stats)} episodes')
-    print("total_ev_served: ", sum(
-        [i[0]['total_ev_served'] for i in stats])/len(stats))
-    print("total_profits: ", sum(
-        [i[0]['total_profits'] for i in stats])/len(stats))
-    print("total_energy_charged: ", sum(
-        [i[0]['total_energy_charged'] for i in stats])/len(stats))
-    print("total_energy_discharged: ", sum(
-        [i[0]['total_energy_discharged'] for i in stats])/len(stats))
-    print("average_user_satisfaction: ", sum(
-        [i[0]['average_user_satisfaction'] for i in stats])/len(stats))
-    print("power_tracker_violation: ", sum(
-        [i[0]['power_tracker_violation'] for i in stats])/len(stats))
-    print("tracking_error: ", sum(
-        [i[0]['tracking_error'] for i in stats])/len(stats))
-    print("energy_user_satisfaction: ", sum(
-        [i[0]['energy_user_satisfaction'] for i in stats])/len(stats))
-    print("total_transformer_overload: ", sum(
-        [i[0]['total_transformer_overload'] for i in stats])/len(stats))
-    print("reward: ", sum([i[0]['episode']['r'] for i in stats])/len(stats))
+    print_evaluation_result(algorithm, stats)
 
     run.log({
         "test/total_ev_served": sum([i[0]['total_ev_served'] for i in stats])/len(stats),

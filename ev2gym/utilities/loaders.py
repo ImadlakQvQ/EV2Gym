@@ -18,7 +18,9 @@ from ev2gym.utilities.utils import EV_spawner, generate_power_setpoints, EV_spaw
 
 
 def load_ev_spawn_scenarios(env) -> None:
-    '''Loads the EV spawn scenarios of the simulation'''
+    """
+    Loads the EV spawn scenarios of the simulation
+    """
 
     # Load the EV specs
     if env.config['heterogeneous_ev_specs']:
