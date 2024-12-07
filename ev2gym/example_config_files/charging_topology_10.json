@@ -1,7 +1,7 @@
 {
     "transformer_1": {
         "id": 1,        
-        "max_power": 100,
+        "max_power": 100,          
         "charging_stations": {
             "charger_1": {
                 "id": 0,                

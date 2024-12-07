@@ -220,8 +220,9 @@ def generate_pv_generation(env) -> np.ndarray:
 
 def load_transformers(env) -> List[Transformer]:
     """
-    Loads the transformers of the simulation
-    If load_from_replay_path is None, then the transformers are created randomly
+    Loads the transformers, the topology, the inflexible loads and solar power of the simulation
+    
+    (If load_from_replay_path is None, then the transformers are created randomly)
     Returns:
         - transformers: a list of transformer objects
     """
@@ -260,7 +261,7 @@ def load_transformers(env) -> List[Transformer]:
             for cs in env.charging_network_topology[tr]['charging_stations']:
                 cs_ids.append(cs_counter)
                 cs_counter += 1
-            # ?only give the number of charging station instead of the configuration in the topology file
+            # charging station is defined in load_ev_charger_profiles(env)
             transformer = Transformer(id=i,
                                       env=env,
                                       cs_ids=cs_ids,
@@ -270,6 +271,7 @@ def load_transformers(env) -> List[Transformer]:
                                       simulation_length=env.simulation_length
                                       )
             transformers.append(transformer)
+    # no topology file
     else:
         if env.number_of_transformers > env.cs:
             raise ValueError(
@@ -278,8 +280,7 @@ def load_transformers(env) -> List[Transformer]:
             # get indexes where the transformer is connected
             transformer = Transformer(id=i,
                                       env=env,
-                                      cs_ids=np.where(
-                                          np.array(env.cs_transformers) == i)[0],
+                                      cs_ids=np.where(np.array(env.cs_transformers) == i)[0],
                                       max_power=env.config['transformer']['max_power'],
                                       inflexible_load=inflexible_loads[i, :],
                                       solar_power=solar_power[i, :],
@@ -292,20 +293,25 @@ def load_transformers(env) -> List[Transformer]:
 
 
 def load_ev_charger_profiles(env) -> List[EV_Charger]:
-    '''Loads the EV charger profiles of the simulation
-    If load_from_replay_path is None, then the EV charger profiles are created randomly
+    """
+    Loads the EV charger profiles, charging stations of the simulation
+    
+    (If load_from_replay_path is None, then the EV charger profiles are created randomly)
 
     Returns:
-        - ev_charger_profiles: a list of ev_charger_profile objects'''
+        - ev_charger_profiles: a list of ev_charger_profile objects
+    """
 
     charging_stations = []
+    # load from replay path
     if env.load_from_replay_path is not None:
         return env.replay.charging_stations
-
+    
+    # whether connected to the grid
     v2g_enabled = env.config['v2g_enabled']
-
+    
+    # parse the topology file and create the charging stations
     if env.charging_network_topology:
-        # parse the topology file and create the charging stations
         cs_counter = 0
         for i, tr in enumerate(env.charging_network_topology):
             for cs in env.charging_network_topology[tr]['charging_stations']:
@@ -361,11 +367,13 @@ def load_ev_charger_profiles(env) -> List[EV_Charger]:
 
 
 def load_ev_profiles(env) -> List[EV]:
-    '''Loads the EV profiles of the simulation
-    If load_from_replay_path is None, then the EV profiles are created randomly
-
+    '''
+    Loads the EV profiles of the simulation
+    
+    (If load_from_replay_path is None, then the EV profiles are created randomly)
     Returns:
-        - ev_profiles: a list of ev_profile objects'''
+        - ev_profiles: a list of ev_profile objects
+    '''
 
     if env.load_from_replay_path is None:
 
