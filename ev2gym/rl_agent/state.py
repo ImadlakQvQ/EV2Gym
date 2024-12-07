@@ -4,9 +4,11 @@ import numpy as np
 
 
 def PublicPST(env, *args):
-    '''This state function is the public power setpoints
+    '''
+    This state function is the public power setpoints
     The state is the public power setpoints
-    The state is a vector '''
+    The state is a vector 
+    '''
 
     state = [
         (env.current_step/env.simulation_length),
@@ -66,7 +68,7 @@ def V2G_profit_max(env, *args):
     '''
     This is the state function for the V2GProfitMax scenario.
     '''
-    
+    # state [current_step, current_power_usage, charge_prices:[1,20], n_ev*[ev_soc, ev_remaining_time], ]
     state = [
         (env.current_step),        
     ]
@@ -109,7 +111,8 @@ def V2G_profit_max_loads(env, *args):
     '''
     This is the state function for the V2GProfitMax scenario with loads
     '''
-    
+    # state [current_step, current_power_usage, charge_prices:[1,20], n_ev*[ev_soc, ev_remaining_time], ]
+
     state = [
         (env.current_step),        
     ]
@@ -154,8 +157,6 @@ def V2G_profit_max_loads(env, *args):
 
     return state
     
-
-
 def BusinessPSTwithMoreKnowledge(env, *args):
     '''
     This state function is used for the business case scenario that requires more knowledge such as SoC and time of departure for each EV present.

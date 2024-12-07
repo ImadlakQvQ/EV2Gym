@@ -221,12 +221,13 @@ def generate_pv_generation(env) -> np.ndarray:
 
 
 def load_transformers(env) -> List[Transformer]:
-    '''Loads the transformers of the simulation
+    """
+    Loads the transformers of the simulation
     If load_from_replay_path is None, then the transformers are created randomly
 
     Returns:
         - transformers: a list of transformer objects
-    '''
+    """
 
     if env.load_from_replay_path is not None:
         return env.replay.transformers

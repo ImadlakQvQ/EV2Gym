@@ -91,7 +91,7 @@ class EV2Gym(gym.Env):
         if self.tr_seed == -1:
             self.tr_seed = self.seed
         self.tr_rng = np.random.default_rng(seed=self.tr_seed)
-
+        # load replay data or not
         if load_from_replay_path is not None:
             with open(load_from_replay_path, 'rb') as file:
                 self.replay = pickle.load(file)
@@ -108,6 +108,7 @@ class EV2Gym(gym.Env):
             self.heterogeneous_specs = self.replay.heterogeneous_specs
 
         else:
+            # get parameters from the config file
             assert cs is not None, "Please provide the number of charging stations"
             self.cs = cs  # Number of charging stations
             # Threshold for the user satisfaction score
@@ -117,9 +118,10 @@ class EV2Gym(gym.Env):
             self.timescale = self.config['timescale']
             self.scenario = self.config['scenario']
             self.simulation_length = int(self.config['simulation_length'])
+            
             # Simulation time
-
             if self.config['random_day']:
+                # 随机初始化日期
                 if "random_hour" in self.config:
                     if self.config["random_hour"]:
                         self.config['hour'] = random.randint(5, 15)
@@ -135,7 +137,6 @@ class EV2Gym(gym.Env):
                     # dont simulate weekends
                     while self.sim_date.weekday() > 4:
                         self.sim_date += datetime.timedelta(days=1)
-
                 if self.config['simulation_days'] == "weekdays":
                     # dont simulate weekends
                     while self.sim_date.weekday() > 4:
@@ -145,19 +146,18 @@ class EV2Gym(gym.Env):
                     while self.sim_date.weekday() < 5:
                         self.sim_date += datetime.timedelta(days=1)
             else:
-
                 self.sim_date = datetime.datetime(self.config['year'],
                                                   self.config['month'],
                                                   self.config['day'],
                                                   self.config['hour'],
                                                   self.config['minute'])
+                
             self.replay = None
-            self.sim_name = f'sim_' + \
-                f'{datetime.datetime.now().strftime("%Y_%m_%d_%f")}'
+            self.sim_name = f'sim_' + f'{datetime.datetime.now().strftime("%Y_%m_%d_%f")}'
 
             self.heterogeneous_specs = self.config['heterogeneous_ev_specs']
 
-        # Whether to simulate the grid or not (Future feature...)
+        # TODO Whether to simulate the grid or not (Future feature...)
         self.simulate_grid = False
 
         self.stats = None

@@ -23,7 +23,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--algorithm', type=str, default="ddpg")
     parser.add_argument('--device', type=str, default="cuda:0")
-    parser.add_argument('--run_name', type=str, default="")
+    parser.add_argument('--run_name', type=str, default="test")
     parser.add_argument('--config_file', type=str,
                         # default="ev2gym/example_config_files/V2GProfitMax.yaml")
     default="ev2gym/example_config_files/PublicPST.yaml")
@@ -115,7 +115,7 @@ if __name__ == "__main__":
     else:
         raise ValueError("Unknown algorithm")
 
-    model.learn(total_timesteps=4_000_000,
+    model.learn(total_timesteps=400000,
                 progress_bar=True,
                 callback=[
                     WandbCallback(

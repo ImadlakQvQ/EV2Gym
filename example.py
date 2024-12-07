@@ -18,7 +18,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 import pkg_resources
 import gymnasium as gym
-
+import os
 
 def eval():
     """
@@ -27,13 +27,13 @@ def eval():
 
     verbose = True
     save_plots = True
-
+    print(os.getcwd())
     replay_path = "./replay/replay_sim_2024_07_05_106720.pkl"
     replay_path = None
 
     # config_file = "ev2gym/example_config_files/PublicPST.yaml"
     # config_file = "ev2gym/example_config_files/BusinessPST.yaml"
-    config_file = "ev2gym/example_config_files/V2GProfitPlusLoads.yaml"
+    config_file = "./ev2gym/example_config_files/V2GProfitPlusLoads.yaml"
 
     env = EV2Gym(config_file=config_file,
                  load_from_replay_path=replay_path,
@@ -67,7 +67,7 @@ def eval():
     # agent = eMPC_V2G_v2(env, control_horizon=10, verbose=False)        
     # agent = RoundRobin(env, verbose=False)
     # agent = ChargeAsLateAsPossible(verbose=False)
-    agent = ChargeAsFastAsPossible()
+    # agent = ChargeAsFastAsPossible()
     # agent = ChargeAsFastAsPossibleToDesiredCapacity()
     rewards = []
 
