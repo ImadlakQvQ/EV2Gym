@@ -7,8 +7,6 @@ import math
 class Transformer():
     """
     Transformer class for the ev_city environment
-
-
     """
 
     def __init__(self,
@@ -24,14 +22,17 @@ class Transformer():
         Initialize the transformer
 
         :param id: unique identifier of the transformer
-        :type id: int
-        :param min_current: The minimum capacity of the transformer in A, defaults to 0
-        :type min_current: int, optional
+            :type id: int
+        :param max_power: The max power of transformer_id
+            :type max_power: int, optional
         :param cs_ids: the charging stations connected to the transformer, defaults to []
-        :type cs_ids: list, optional
-        :param timescale: the timescale of the simulation, defaults to 5
-        :type timescale: int, optional
-
+            :type cs_ids: list, optional
+        :param inflexible_load: inflexible load data
+            :type inflexible_load: np.array, optional
+        :param solar_powers: solar power data
+            :type solar_power: np.array, optional
+        :param simulation_length: 
+            :type simulation_length: int, optional
         """
 
         self.id = id        

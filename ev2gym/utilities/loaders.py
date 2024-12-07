@@ -98,24 +98,24 @@ def load_power_setpoints(env) -> np.ndarray:
 
 
 def generate_residential_inflexible_loads(env) -> np.ndarray:
-    '''
+    """
     This function loads the inflexible loads of each transformer
     in the simulation.
-    '''
+    """
 
     # Load the data
     data_path = pkg_resources.resource_filename(
         'ev2gym', 'data/residential_loads.csv')
     data = pd.read_csv(data_path, header=None)
-
+    # set time parameters
     desired_timescale = env.timescale
     simulation_length = env.simulation_length
     simulation_date = env.sim_starting_date.strftime('%Y-%m-%d %H:%M:%S')
     number_of_transformers = env.number_of_transformers
-
+    # ?why set a determined starting date
     dataset_timescale = 15
     dataset_starting_date = '2022-01-01 00:00:00'
-
+    # set into the same time scale
     if desired_timescale > dataset_timescale:
         data = data.groupby(
             data.index // (desired_timescale/dataset_timescale)).max()
@@ -155,10 +155,10 @@ def generate_residential_inflexible_loads(env) -> np.ndarray:
 
 
 def generate_pv_generation(env) -> np.ndarray:
-    '''
+    """
     This function loads the PV generation of each transformer by loading the data from a file
-    and then adding minor variations to the data
-    '''
+    and then adding minor variations to the data (add some stochastics into the data)
+    """
 
     # Load the data
     data_path = pkg_resources.resource_filename(
@@ -222,37 +222,38 @@ def load_transformers(env) -> List[Transformer]:
     """
     Loads the transformers of the simulation
     If load_from_replay_path is None, then the transformers are created randomly
-
     Returns:
         - transformers: a list of transformer objects
     """
-
+    # if replay path is provided, directly load from the replay file
     if env.load_from_replay_path is not None:
         return env.replay.transformers
 
     transformers = []
 
+    # load inflexible load
     if env.config['inflexible_loads']['include']:
-
         if env.scenario == 'private':
             inflexible_loads = generate_residential_inflexible_loads(env)
 
         # TODO add inflexible loads for public and workplace scenarios
+        # Now only have inflexible loads for private place
         else:
             inflexible_loads = generate_residential_inflexible_loads(env)
-
     else:
+        # set to zero if no inflexible loads
         inflexible_loads = np.zeros((env.number_of_transformers,
                                     env.simulation_length))
-
+        
+    # load solar power data
     if env.config['solar_power']['include']:
         solar_power = generate_pv_generation(env)
     else:
         solar_power = np.zeros((env.number_of_transformers,
                                 env.simulation_length))
-
+        
+    # parse the topology file and create the transformers
     if env.charging_network_topology:
-        # parse the topology file and create the transformers
         cs_counter = 0
         for i, tr in enumerate(env.charging_network_topology):
             cs_ids = []
@@ -269,7 +270,6 @@ def load_transformers(env) -> List[Transformer]:
                                       )
 
             transformers.append(transformer)
-
     else:
         if env.number_of_transformers > env.cs:
             raise ValueError(
