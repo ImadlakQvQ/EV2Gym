@@ -8,7 +8,6 @@ class Transformer():
     """
     Transformer class for the ev_city environment
     """
-
     def __init__(self,
                  id,  # unique identifier of the transformer
                  env,
@@ -191,10 +190,9 @@ class Transformer():
         Normalize the solar_power using the configuration file and teh max_power of the transformer
         '''
         if env.config['solar_power']['include']:
-            mult = env.config['solar_power']['solar_power_capacity_multiplier_mean']
-            mult = env.tr_rng.normal(mult, 0.1)
-            self.solar_power = -self.solar_power * \
-                mult * max(self.max_power)
+            mid = env.config['solar_power']['solar_power_capacity_multiplier_mean']
+            mid = env.tr_rng.normal(mid, 0.1)
+            self.solar_power = -self.solar_power * mid * max(self.max_power)
 
     def generate_pv_generation_forecast(self, env) -> None:
         '''
@@ -213,16 +211,16 @@ class Transformer():
 
     def normalize_inflexible_loads(self, env) -> None:
         '''
-        Check that infelxible_loads are lower than the max_power, if not, set them to the max_power
+        Check that inflexible_loads are lower than the max_power, if not, set them to the max_power
         '''
 
         if env.config['inflexible_loads']['include']:
-            mult = env.config['inflexible_loads']['inflexible_loads_capacity_multiplier_mean']
-            mult = env.tr_rng.normal(mult, 0.1)
+            mid = env.config['inflexible_loads']['inflexible_loads_capacity_multiplier_mean']
+            mid = env.tr_rng.normal(mid, 0.1)
 
             # scale up the data to match the max_power of the transformers
             self.inflexible_load = self.inflexible_load * \
-                mult * (max(self.max_power) /
+                mid * (max(self.max_power) /
                         self.inflexible_load.max()+0.0000001)
             # for each step
             for j in range(env.simulation_length):

@@ -260,6 +260,7 @@ def load_transformers(env) -> List[Transformer]:
             for cs in env.charging_network_topology[tr]['charging_stations']:
                 cs_ids.append(cs_counter)
                 cs_counter += 1
+            # ?only give the number of charging station instead of the configuration in the topology file
             transformer = Transformer(id=i,
                                       env=env,
                                       cs_ids=cs_ids,
@@ -268,7 +269,6 @@ def load_transformers(env) -> List[Transformer]:
                                       solar_power=solar_power[i, :],
                                       simulation_length=env.simulation_length
                                       )
-
             transformers.append(transformer)
     else:
         if env.number_of_transformers > env.cs:
