@@ -627,16 +627,13 @@ def median_smoothing(v, window_size) -> np.ndarray:
 
 
 def generate_power_setpoints(env) -> np.ndarray:
-    '''
+    """
     This function generates the power setpoints for the entire simulation using
     the list of EVs and the charging stations from the environment.
-
-    It considers the ev SoC and teh steps required to fully charge the EVs.
-
+    It considers the ev SoC and the steps required to fully charge the EVs.
     Returns:
         power_setpoints: np.ndarray
-
-    '''
+    """
 
     power_setpoints = np.zeros(env.simulation_length)
     # get normalized prices

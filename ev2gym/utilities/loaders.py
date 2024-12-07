@@ -19,10 +19,10 @@ from ev2gym.utilities.utils import EV_spawner, generate_power_setpoints, EV_spaw
 
 def load_ev_spawn_scenarios(env) -> None:
     """
-    Loads the EV spawn scenarios of the simulation
+    Loads the EV spawn scenarios of the simulation, only define the model of EV, not determine the number of EVs
     """
 
-    # Load the EV specs
+    # Load the EV specifications
     if env.config['heterogeneous_ev_specs']:
         
         if "ev_specs_file" in env.config:
@@ -38,20 +38,19 @@ def load_ev_spawn_scenarios(env) -> None:
         for i, ev_name in enumerate(env.ev_specs.keys()):
             # sum the total number of registrations
             registrations[i] = env.ev_specs[ev_name]['number_of_registrations']
-
+        # ?get all the registration number then what
+        # ?why need normalization
         env.normalized_ev_registrations = registrations/registrations.sum()
 
     if env.scenario == 'GF':
+        # ?ev generate files DONT HAVE THESE FILES
         env.df_arrival = np.load('./GF_data/time_of_arrival.npy')  # weekdays
-        env.time_of_connection_vs_hour_weekday = np.load(
-            './GF_data/weekday_time_of_stay.npy')
-        env.time_of_connection_vs_hour_weekend = np.load(
-            './GF_data/weekend_time_of_stay.npy')
+        env.time_of_connection_vs_hour_weekday = np.load('./GF_data/weekday_time_of_stay.npy')
+        env.time_of_connection_vs_hour_weekend = np.load('./GF_data/weekend_time_of_stay.npy')
         env.df_req_energy_weekday = np.load('./GF_data/weekday_volumeKWh.npy')
         env.df_req_energy_weekend = np.load('./GF_data/weekend_volumeKWh.npy')
-
         return
-
+    # get the files
     df_arrival_week_file = pkg_resources.resource_filename(
         'ev2gym', 'data/distribution-of-arrival.csv')
     df_arrival_weekend_file = pkg_resources.resource_filename(
@@ -67,17 +66,14 @@ def load_ev_spawn_scenarios(env) -> None:
         'ev2gym', 'data/mean-demand-per-arrival.csv')
     df_time_of_stay_vs_arrival_file = pkg_resources.resource_filename(
         'ev2gym', 'data/mean-session-length-per.csv')
-
+    # load files to the environment
     env.df_arrival_week = pd.read_csv(df_arrival_week_file)  # weekdays
     env.df_arrival_weekend = pd.read_csv(df_arrival_weekend_file)  # weekends
-    env.df_connection_time = pd.read_csv(
-        df_connection_time_file)  # connection time
+    env.df_connection_time = pd.read_csv(df_connection_time_file)  # connection time
     env.df_energy_demand = pd.read_csv(df_energy_demand_file)  # energy demand
-    env.time_of_connection_vs_hour = np.load(
-        time_of_connection_vs_hour_file)  # time of connection vs hour
+    env.time_of_connection_vs_hour = np.load(time_of_connection_vs_hour_file)  # time of connection vs hour
 
-    env.df_req_energy = pd.read_csv(
-        df_req_energy_file)  # energy demand per arrival
+    env.df_req_energy = pd.read_csv(df_req_energy_file)  # energy demand per arrival
     # replace column work with workplace
     env.df_req_energy = env.df_req_energy.rename(columns={'work': 'workplace',
                                                           'home': 'private'})
