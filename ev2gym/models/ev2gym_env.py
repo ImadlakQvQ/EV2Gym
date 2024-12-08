@@ -194,12 +194,12 @@ class EV2Gym(gym.Env):
                     [*np.arange(self.number_of_transformers)], self.cs % self.number_of_transformers)
                 random.shuffle(self.cs_transformers)
 
-        # Instatiate Transformers
+        # Initiate Transformers
         self.transformers = load_transformers(self)
         for tr in self.transformers:
             tr.reset(step=0)
 
-        # Instatiate Charging Stations
+        # Initiate Charging Stations
         self.charging_stations = load_ev_charger_profiles(self)
         for cs in self.charging_stations:
             cs.reset()
@@ -508,15 +508,16 @@ class EV2Gym(gym.Env):
         if self.current_step >= self.simulation_length or \
             (any(tr.is_overloaded() > 0 for tr in self.transformers)
              and not self.generate_rnd_game):
-            """Terminate if:
+            """
+            Terminate if:
                 - The simulation length is reached
                 - Any user satisfaction score is below the threshold
                 - Any charging station is overloaded
                 Dont terminate when overloading if :
                 - generate_rnd_game is True
-                Carefull: if generate_rnd_game is True,
+                Careful: if generate_rnd_game is True,
                 the simulation might end up in infeasible problem
-                """
+            """
             if self.verbose:
                 print_statistics(self)
 
