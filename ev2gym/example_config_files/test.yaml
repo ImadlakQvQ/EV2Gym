@@ -4,7 +4,7 @@
 # Simulation Parameters
 ##############################################################################
 timescale: 15 # in minutes per step
-simulation_length: 50 #90 # in steps per simulation
+simulation_length: 96 #90 # in steps per simulation 96 for one day
 
 ##############################################################################
 # Date and Time
@@ -15,7 +15,7 @@ month: 1 # 1-12
 day: 20 # 1-31
 # TODO 还用不了啊 Whether to get a random date every time the environment is reset
 random_day: False # True or False
-
+random_hour: False
 # Simulation Starting Time
 # Hour and minute do not change after the environment has been reset
 hour: 5 # Simulation starting hour (24 hour format)
@@ -36,14 +36,14 @@ discharge_price_factor: 1 # how many times more abs(expensive/cheaper) it is to 
 ##############################################################################
 # Charging Network ###### TOPOLOGY ########
 ##############################################################################
-v2g_enabled: False # True or False
+v2g_enabled: True # True or False
 number_of_charging_stations: 10
 number_of_transformers: 2
 number_of_ports_per_cs: 2
 # Provide path if you want to load a specific charging topology,
 # else write None for a randomized one with the above parameters
 # the above parameters should be change if topology is loaded
-charging_network_topology: None #"/Users/xiongzheng/program/tutorial/EV2Gym/ev2gym/example_config_files/charging_topology_10.json"
+charging_network_topology: /Users/xiongzheng/program/tutorial/EV2Gym/ev2gym/example_config_files/charging_topology_10.json
 
 ##############################################################################
 # Power Setpoints Settings
@@ -60,7 +60,7 @@ power_setpoint_flexiblity: 10 # (in percentage +/- %)
 tr_seed: -1 # seed for the random number generator of transformer loads(-1 for random seed)
 
 inflexible_loads: # Offices, homes
-  include: False # True or False
+  include: True # True or False
   inflexible_loads_capacity_multiplier_mean: 1 # 1 is default, the higher the number the more inflexible loads
   forecast_mean: 30 # in percentage of load at time t%
   forecast_std: 5 # in percentage of load at time t%

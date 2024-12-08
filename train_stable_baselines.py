@@ -45,14 +45,14 @@ def print_evaluation_result(algorithm, stats):
 if __name__ == "__main__":
 
     parser = argparse.ArgumentParser()
-    parser.add_argument('--algorithm', type=str, default="ddpg")
+    parser.add_argument('--alg', type=str, default="ddpg")
     parser.add_argument('--device', type=str, default="cuda:0")
-    parser.add_argument('--run_name', type=str, default="test")
+    parser.add_argument('--name', type=str, default="test")
     parser.add_argument('--config_file', type=str, default="PublicPST")
 
-    algorithm = parser.parse_args().algorithm
+    algorithm = parser.parse_args().alg
     device = parser.parse_args().device
-    run_name = parser.parse_args().run_name
+    run_name = parser.parse_args().name
     config_file = f"ev2gym/example_config_files/{parser.parse_args().config_file}.yaml"
 
     config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)

@@ -111,7 +111,7 @@ def V2G_profit_max_loads(env, *args):
     '''
     This is the state function for the V2GProfitMax scenario with loads
     '''
-    # state [current_step, current_power_usage, charge_prices:[1,20], n_ev*[ev_soc, ev_remaining_time], ]
+    # state [current_step, current_power_usage, charge_prices:[t,t+20], n_tr*[loads-pv,power_limits, n_ev*[ev_soc, ev_remaining_time]], ]
 
     state = [
         (env.current_step),        
