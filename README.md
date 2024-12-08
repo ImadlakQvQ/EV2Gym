@@ -12,7 +12,7 @@ Develop and evaluate **any type of smart charging algorithm**: from simple heuri
 
 EV2Gym is **fully customizable** and easily **configurable**!
 
-The EV2Gym **Paper** can be found at: [link](https://arxiv.org/abs/2404.01849).[link](https://github.com/ImadlakQvQ/EV2Gym/2404.01849v1.pdf)
+The EV2Gym **Paper** can be found at: [link](https://arxiv.org/abs/2404.01849).
 
 The developed MPC algorithms **Paper** can be found at: [link](https://arxiv.org/abs/2405.11963).
 
