@@ -441,7 +441,7 @@ def spawn_single_EV_GF(env,
 
 def EV_spawner(env) -> List[EV]:
     '''
-    This function spawns all the EVs of the current simulation and returns the list of EVs
+    This function spawns all the EVs of the current simulation and returns the list of EVs that is in the port
 
     Returns:
         EVs: list of EVs
@@ -451,11 +451,11 @@ def EV_spawner(env) -> List[EV]:
 
     occupancy_list = np.zeros((env.number_of_ports, env.simulation_length))
 
-    arrival_probabilities = np.random.rand(env.number_of_ports,
-                                           env.simulation_length)
+    # generate a random matrix from [0, 1) float numbers
+    arrival_probabilities = np.random.rand(env.number_of_ports, env.simulation_length)
 
-    scenario = env.scenario
-    user_spawn_multiplier = env.config["spawn_multiplier"]
+    scenario = env.scenario     # public private workplace
+    user_spawn_multiplier = env.config["spawn_multiplier"]      # define the number of EVs 
     time = env.sim_date
 
     # Define minimum time of stay duration so that an EV can fully charge
@@ -471,21 +471,24 @@ def EV_spawner(env) -> List[EV]:
         hour = time.hour
         minute = time.minute
         # Divide by 15 because the spawn rate is in 15 minute intervals (in the csv file)
-        i = hour*4 + minute//15
-
+        i = hour*4 + minute//15  # calculate the present timestep
+        
+        # during weekdays
         if day < 5:
             if scenario == "workplace" and (hour < 6 or hour > 18):
                 time = time + datetime.timedelta(minutes=env.timescale)
-                continue
+                continue  # skip into the next time step without any operation
             else:
                 tau = env.df_arrival_week[scenario].iloc[i]
                 multiplier = 1  # 10
+                
+        # during weekends        
         else:
             if scenario == "workplace":
                 time = time + datetime.timedelta(minutes=env.timescale)
-                continue
+                continue  # skip into the next time step without any operation
             else:
-                tau = env.df_arrival_weekend[scenario].iloc[i]
+                tau = env.df_arrival_weekend[scenario].iloc[i]  # calculate the present timestep
 
             if day == 5:
                 multiplier = 1  # 8
@@ -494,6 +497,7 @@ def EV_spawner(env) -> List[EV]:
 
         counter = 0
         for cs in env.charging_stations:
+            # one charging station have several charging ports
             for port in range(cs.n_ports):
                 # if port is empty
                 if occupancy_list[counter, t] == 0 and \
@@ -509,12 +513,10 @@ def EV_spawner(env) -> List[EV]:
                                              minute=minute,
                                              step=t,
                                              min_time_of_stay_steps=min_time_of_stay_steps)
-
+                        # set a ev list 
                         if ev is not None:
                             ev_list.append(ev)
-
-                            occupancy_list[counter, t +
-                                           1:ev.time_of_departure] = 1
+                            occupancy_list[counter, t + 1:ev.time_of_departure] = 1
                 counter += 1
         # step the time
         time = time + datetime.timedelta(minutes=env.timescale)

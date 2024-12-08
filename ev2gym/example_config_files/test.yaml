@@ -29,7 +29,7 @@ scenario: public # public, private, or workplace
 spawn_multiplier: 5 # 1 is default, the higher the number the more EVs spawn. Play somewhere between 3-7. With 1 often only 1/5 EVs show up.
 
 ##############################################################################
-# Prices
+# Prices discharge_price = charge_price * discharge_price_factor
 ##############################################################################
 discharge_price_factor: 1 # how many times more abs(expensive/cheaper) it is to discharge than to charge. Are similar, discharging cost could be a bit higher.
 
@@ -128,7 +128,7 @@ ev:
 
   #The following values are also used if "heterogeneous_ev_specs = True"
   min_battery_capacity: 5 # in kWh
-  min_time_of_stay: 60 # in minutes
+  min_time_of_stay: 60 # in minutes # ?can be fully charged in 60 minutes?
   min_emergency_battery_capacity: 25 # in kWh
   desired_capacity: 1 # in (0-1) (0% - 100%)
   #if transition_soc is < 1, the curve of the line is affected by:

@@ -368,11 +368,11 @@ def load_ev_charger_profiles(env) -> List[EV_Charger]:
 
 def load_ev_profiles(env) -> List[EV]:
     '''
-    Loads the EV profiles of the simulation
+    Loads the EV profiles of the simulation return a list of ev objects within the whole simulation
     
     (If load_from_replay_path is None, then the EV profiles are created randomly)
     Returns:
-        - ev_profiles: a list of ev_profile objects
+        - ev_profiles: a list of ev objects
     '''
 
     if env.load_from_replay_path is None:
@@ -386,16 +386,17 @@ def load_ev_profiles(env) -> List[EV]:
         ev_profiles = EV_spawner(env)
         while len(ev_profiles) == 0:
             ev_profiles = EV_spawner(env)
-
         return ev_profiles
+    
     else:
         return env.replay.EVs
 
 
 def load_electricity_prices(env) -> Tuple[np.ndarray, np.ndarray]:
-    '''Loads the electricity prices of the simulation
-    If load_from_replay_path is None, then the electricity prices are created randomly
-
+    '''
+    Loads the electricity prices of the simulation
+    
+    (If load_from_replay_path is None, then the electricity prices are created randomly)
     Returns:
         - charge_prices: a matrix of size (number of charging stations, simulation length) with the charge prices
         - discharge_prices: a matrix of size (number of charging stations, simulation length) with the discharge prices'''
@@ -414,7 +415,7 @@ def load_electricity_prices(env) -> Tuple[np.ndarray, np.ndarray]:
     data['day'] = pd.DatetimeIndex(data['Datetime (UTC)']).day
     data['hour'] = pd.DatetimeIndex(data['Datetime (UTC)']).hour
 
-    # assume charge and discharge prices are the same
+    # assume charge and discharge prices are the same at first
     # assume prices are the same for all charging stations
 
     charge_prices = np.zeros((env.cs, env.simulation_length))
@@ -447,8 +448,7 @@ def load_electricity_prices(env) -> Tuple[np.ndarray, np.ndarray]:
                                               'Price (EUR/MWhe)'].iloc[0]/1000  # €/kWh
 
         # step to next
-        sim_temp_date = sim_temp_date + \
-            datetime.timedelta(minutes=env.timescale)
-
+        sim_temp_date = sim_temp_date + datetime.timedelta(minutes=env.timescale)
+    # set a factor to determine the discharge prices
     discharge_prices = discharge_prices * env.config['discharge_price_factor']
     return charge_prices, discharge_prices
