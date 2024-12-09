@@ -194,7 +194,7 @@ def generate_pv_generation(env) -> np.ndarray:
     # duplicate the data to have two years of data
     data = pd.concat([data, data], ignore_index=True)
 
-    # add a date column to the dataframe
+    # add a date column to the data frame
     data['date'] = pd.date_range(
         start=dataset_starting_date, periods=data.shape[0], freq=f'{desired_timescale}min')
 

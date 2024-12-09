@@ -79,6 +79,7 @@ if __name__ == "__main__":
                                  n_eval_episodes=10, deterministic=True,
                                  render=False)
 ###################################### set agent ####################################
+# TODO set my own agent
     if algorithm == "ddpg":
         model = DDPG("MlpPolicy", env, verbose=1,
                     learning_rate = 1e-3,
@@ -87,7 +88,7 @@ if __name__ == "__main__":
                     batch_size = 100,
                     tau = 0.005,
                     gamma = 0.99,                     
-                     device=device, tensorboard_log="./logs/")
+                    device=device, tensorboard_log="./logs/")
     elif algorithm == "td3":
         model = TD3("MlpPolicy", env, verbose=1,
                     device=device, tensorboard_log="./logs/")
@@ -125,7 +126,7 @@ if __name__ == "__main__":
                     eval_callback])
 
     model.save(f"./saved_models/{group_name}/{run_name}")
-
+    #################################### evaluation ######################################
     env = model.get_env()
     obs = env.reset()
 

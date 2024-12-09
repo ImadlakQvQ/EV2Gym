@@ -25,11 +25,11 @@ minute: 0 # Simulation starting minute (0-59)
 simulation_days: weekdays # weekdays, weekends, or both
 
 # EV Spawn Behavior
-scenario: public # public, private, or workplace
+scenario: workplace # public, private, or workplace
 spawn_multiplier: 5 # 1 is default, the higher the number the more EVs spawn. Play somewhere between 3-7. With 1 often only 1/5 EVs show up.
 
 ##############################################################################
-# Prices discharge_price = charge_price * discharge_price_factor
+# Prices discharge_price = - charge_price * discharge_price_factor (charge price < 0)
 ##############################################################################
 discharge_price_factor: 1 # how many times more abs(expensive/cheaper) it is to discharge than to charge. Are similar, discharging cost could be a bit higher.
 

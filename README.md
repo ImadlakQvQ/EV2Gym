@@ -10,6 +10,8 @@
 
 Develop and evaluate **any type of smart charging algorithm**: from simple heuristics, Model Predictive Control, Mathematical Programming, to Reinforcement Learning!
 
+Stable_baselines3 documents [link](https://stable-baselines3.readthedocs.io/en/master/)
+
 EV2Gym is **fully customizable** and easily **configurable**!
 
 The EV2Gym **Paper** can be found at: [link](https://arxiv.org/abs/2404.01849).

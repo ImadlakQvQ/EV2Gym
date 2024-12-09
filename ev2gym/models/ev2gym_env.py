@@ -517,7 +517,7 @@ class EV2Gym(gym.Env):
                 - generate_rnd_game is True
                 Careful: if generate_rnd_game is True,
                 the simulation might end up in infeasible problem
-            """
+                """
             if self.verbose:
                 print_statistics(self)
 

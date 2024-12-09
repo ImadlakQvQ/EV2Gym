@@ -1,11 +1,14 @@
-'''This file contains various example reward functions for the RL agent. Users can create their own reward function here or in their own file using the same structure as below
+'''
+This file contains various example reward functions for the RL agent. Users can create their own reward function here or in their own file using the same structure as below
 '''
 
 import math
 
 def SquaredTrackingErrorReward(env,*args):
-    '''This reward function is the squared tracking error that uses the minimum of the power setpoints and the charge power potential
-    The reward is negative'''
+    '''
+    This reward function is the squared tracking error that uses the minimum of the power setpoints and the charge power potential
+    The reward is negative
+    '''
     
     reward = - (min(env.power_setpoints[env.current_step-1], env.charge_power_potential[env.current_step-1]) -
         env.current_power_usage[env.current_step-1])**2
@@ -13,9 +16,11 @@ def SquaredTrackingErrorReward(env,*args):
     return reward
 
 def SqTrError_TrPenalty_UserIncentives(env, _, user_satisfaction_list, *args):
-    ''' This reward function is the squared tracking error that uses the minimum of the power setpoints and the charge power potential
-    It penalizes transofrmers that are overloaded    
-    The reward is negative'''
+    ''' 
+    This reward function is the squared tracking error that uses the minimum of the power setpoints and the charge power potential
+    It penalizes transformers that are overloaded    
+    The reward is negative
+    '''
     
     tr_max_limit = env.transformers[0].max_power[env.current_step-1]
     
@@ -31,7 +36,16 @@ def SqTrError_TrPenalty_UserIncentives(env, _, user_satisfaction_list, *args):
     return reward
 
 def ProfitMax_TrPenalty_UserIncentives(env, total_costs, user_satisfaction_list, *args):
-    
+    """
+    Considering the user satisfaction and penalty of transformers' overload
+    Args:
+        env (_type_): _description_
+        total_costs (_type_): charging and discharging profit of the whole system
+        user_satisfaction_list (_type_): satisfaction of users [0, 1]
+
+    Returns:
+        _type_: _description_
+    """
     reward = total_costs
     
     for tr in env.transformers:
@@ -75,7 +89,10 @@ def MinimizeTrackerSurplusWithChargeRewards(env,*args):
     return reward
 
 def profit_maximization(env, total_costs, user_satisfaction_list, *args):
-    ''' This reward function is used for the profit maximization case '''
+    ''' 
+    This reward function is used for the profit maximization case 
+    This only consider reduce the user satisfaction rate for the total costs
+    '''
     
     reward = total_costs
     
