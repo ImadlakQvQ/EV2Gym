@@ -157,7 +157,7 @@ def generate_residential_inflexible_loads(env) -> np.ndarray:
 def generate_pv_generation(env) -> np.ndarray:
     """
     This function loads the PV generation of each transformer by loading the data from a file
-    and then adding minor variations to the data (add some stochastics into the data)
+    and then adding minor variations to the data (add some stochastic into the data)
     """
 
     # Load the data
