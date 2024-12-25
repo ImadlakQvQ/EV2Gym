@@ -2,18 +2,19 @@
 #SBATCH --account=def-bboulet     # set account
 #SBATCH --gpus-per-node=1         # Number of GPU(s) per node
 #SBATCH --output=log_job/%j.out      # log 保存地址 文件为job number
-#SBATCH --cpus-per-task=6         # CPU cores/threads
+#SBATCH --cpus-per-task=32         # CPU cores/threads
 #SBATCH --mem=80G               # memory per node
-#SBATCH --time=7-00:00            # set the time for tasks 
+#SBATCH --time=3-00:00            # set the time for tasks 
 
 module load StdEnv/2023  gcc/12.3 cuda/12.2 arrow/17.0 rust/1.70.0 python/3.10.13                                 
-source ~/env/ev/bin/activate                                                         
+source venv/bin/activate                                                    
 
 # export WANDB_MODE=offline         # set wandb to offline mode
 
 # Define the algorithms and configuration files
 algorithms=("ddpg" "td3" "sac" "a2c" "ppo" "tqc" "trpo" "ars" "rppo")
-config_files=("V2GProfitMax" "V2GProfitPlusLoads") # 替换为实际配置文件名
+# config_files=("V2GProfitMax" "V2GProfitPlusLoads") # 替换为实际配置文件名
+config_files=( "V2GProfitPlusLoads") # 替换为实际配置文件名
 
 # Loop through each configuration file and algorithm
 for config in "${config_files[@]}"; do
