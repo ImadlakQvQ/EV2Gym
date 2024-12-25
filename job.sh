@@ -4,17 +4,16 @@
 #SBATCH --output=log_job/%j.out      # log 保存地址 文件为job number
 #SBATCH --cpus-per-task=6         # CPU cores/threads
 #SBATCH --mem=80G               # memory per node
-#SBATCH --time=1-00:00            # set the time for tasks 
+#SBATCH --time=7-00:00            # set the time for tasks 
 
-module load StdEnv/2023  gcc/12.3 cuda/12.2 arrow/17.0 rust/1.70.0 python/3.10.13 
-cd /project/def-bboulet/imadlak/program/EV2GYM                                   
-source ev/bin/activate                                                         
+module load StdEnv/2023  gcc/12.3 cuda/12.2 arrow/17.0 rust/1.70.0 python/3.10.13                                 
+source ~/env/ev/bin/activate                                                         
 
-export WANDB_MODE=offline         # set wandb to offline mode
+# export WANDB_MODE=offline         # set wandb to offline mode
 
 # Define the algorithms and configuration files
 algorithms=("ddpg" "td3" "sac" "a2c" "ppo" "tqc" "trpo" "ars" "rppo")
-config_files=("PublicPST" "V2GProfitMax" "V2GProfitPlusLoads") # 替换为实际配置文件名
+config_files=("V2GProfitMax" "V2GProfitPlusLoads") # 替换为实际配置文件名
 
 # Loop through each configuration file and algorithm
 for config in "${config_files[@]}"; do
