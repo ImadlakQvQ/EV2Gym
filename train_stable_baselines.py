@@ -25,12 +25,14 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument('--alg', type=str, default="ddpg")
     parser.add_argument('--device', type=str, default="cuda:0")
+    parser.add_argument('--proj', type=str, default="ev2gym")
     parser.add_argument('--name', type=str, default="test")
     parser.add_argument('--config_file', type=str, default="PublicPST")
 
     algorithm = parser.parse_args().alg
     device = parser.parse_args().device
     run_name = parser.parse_args().name
+    proj = parser.parse_args().proj
     config_file = f"ev2gym/example_config_files/{parser.parse_args().config_file}.yaml"
 
     config = yaml.load(open(config_file, 'r'), Loader=yaml.FullLoader)
@@ -51,7 +53,7 @@ if __name__ == "__main__":
                 
     run_name += f'{algorithm}_{reward_function.__name__}_{state_function.__name__}'
 
-    run = wandb.init(project='ev2gym',
+    run = wandb.init(project=proj,
                      sync_tensorboard=True,
                      group=group_name,
                      name=run_name,
