@@ -1,18 +1,20 @@
 #!/bin/bash
 
-# Define the algorithms you want to run
 algorithms=("ddpg" "td3" "sac" "a2c" "ppo" "tqc" "trpo" "ars" "rppo")
+config_files=("V2GProfitMax" "V2GProfitPlusLoads") # 替换为实际配置文件名
 
-# Loop through each algorithm and execute the script
-for alg in "${algorithms[@]}"; do
-    echo "Running with algorithm: $alg"
-    python train_stable_baselines.py --alg $alg --device cuda:0 --name "${alg}_experiment" --config_file "PublicPST"
+# Loop through each configuration file and algorithm
+for config in "${config_files[@]}"; do
+    for alg in "${algorithms[@]}"; do
+        echo "Running with algorithm: $alg and config file: $config"
+        python train_stable_baselines.py --alg $alg --device cuda:0 --name "${alg}_${config}_experiment" --config_file "$config"
 
-    # Optional: Check if the previous command succeeded
-    if [ $? -ne 0 ]; then
-        echo "Error occurred while running $alg. Exiting."
-        exit 1
-    fi
+        # Check if the previous command succeeded
+        if [ $? -ne 0 ]; then
+            echo "Error occurred while running $alg with config file $config. Skipping to the next combination."
+            continue
+        fi
+    done
 done
 
-echo "All baselines have been executed."
+echo "All baselines and configurations have been executed."
